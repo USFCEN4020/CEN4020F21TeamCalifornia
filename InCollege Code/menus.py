@@ -1,10 +1,13 @@
 #imports all functions from messages.py
 from messages import *
-#imports all functions from verify_acc.py
-from verify_acc import *
+#imports all functions from search.py
+from search import *
+#imports all functions from jobs.py
+from jobs import *
 
-global logged_in
+logged_in = []
 
+#/////////////////////////////////////////////////////////////////////////     HOME MENU     /////////////////////////////////////////////////////////////////////////
 
 def homeMenu():
     
@@ -18,7 +21,7 @@ def homeMenu():
         #gets user input
         select = input("Enter command: ")
 
-        if(select == "1" or select == "2" or select == "3" or select == "0"):
+        if(select == "1" or select == "2" or select == "3" or select == "4" or select == "0"):
             break
         else:
             #if user inputs an incorrect value an this function prints an error message
@@ -30,18 +33,26 @@ def homeMenu():
     elif(select == "2"):
         createAccountMenu()
     elif(select == "3"):
+        searchPeople()
+    elif(select == "4"):
         print("\nVideo is now playing...\n")
     elif(select == "0"):
         print("Thank you for using InCollege!")
         quit()
+    else:
+        printInvalidEntry()
 
-
-
-
+#/////////////////////////////////////////////////////////////////////////     LOGIN MENU     /////////////////////////////////////////////////////////////////////////
 
 def loginMenu():
     
     print("\nLog In to InCollege\n")
+    
+    create_table()
+    
+    if number_rows() == 0:
+        print("No users in the system. Please create an account.")
+        return
 
     found = False
 
@@ -51,44 +62,38 @@ def loginMenu():
         password = input("Enter password: ")
 
         # check if username and password are valid
-        found = find_account(username, password)
+        found = login(username, password)
         if not found:
             print("Incorrect username/password, please try again\n")
     print("\nYou have successfully logged in\n")
-    logged_in = True
+    global logged_in 
+    #gets the first and last name of the current user that is logged in
+    logged_in = current_user(username, password)
     mainMenu()
 
-
-
-
+#/////////////////////////////////////////////////////////////////////     CREATE ACCOUNT MENU     ////////////////////////////////////////////////////////////////////
 
 def createAccountMenu():
     
     print("\nCreate a New Account\n")
 
-    # read CSV file containing all account information
-    accounts = pd.read_csv('accounts.csv', index_col=0, squeeze=True, header=None).to_dict()
+    create_table()
 
-    # TODO: looping while user inputs invalid values
-    if len(accounts.keys()) < 5:
+    if number_rows() < 5:
         username = input("Enter username: ")
         password = input("Enter password: ")
+        firstname = input("Enter First Name: ")
+        lastname = input("Enter Last Name: ")
 
         # check if username is unique and password is valid
-        if not username in accounts and password_check(password):
-            accounts[username] = password  # add <username, password> pair into dict
+        if not unique_user(username) and password_check(password):
+            data_entry(username, password,firstname,lastname)
             print("Successfully created an account\n")
     else:
         print("All permitted accounts have been created, please come back later\n")
-
-    # save accounts dict into CSV file
-    df = pd.DataFrame(accounts.items())
-    df.to_csv('accounts.csv', index=False, header=False)
     return 0
 
-
-
-
+#/////////////////////////////////////////////////////////////////////////     MAIN MENU     /////////////////////////////////////////////////////////////////////////
 
 def mainMenu():
     
@@ -99,21 +104,21 @@ def mainMenu():
         opt = input("Enter command: ")
 
         if int(opt) == 1: #search for job
-            #prints an under construction message
-            printUnderConstruction()
+            jobMenu()
         elif int(opt) == 2:  
             searchPeople()
         elif int(opt) == 3:  # learn a new skill
             skillMenu()
-        else:
-            logged_in = False
+        elif int(opt) == 0:
+            global logged_in
+            logged_in = []
             print("You have sucessfully logged out!\n")
             break
+        else:
+            printInvalidEntry()
     return 0
 
-
-
-
+#/////////////////////////////////////////////////////////////////////////     SKILL MENU     /////////////////////////////////////////////////////////////////////////
 
 def skillMenu():
     
@@ -126,22 +131,32 @@ def skillMenu():
         if skill != "0":
             #prints an under construction message
             printUnderConstruction()
-        else:
+        elif skill == "0":
             break
+        else:
+            printInvalidEntry()
     return 0
 
+#/////////////////////////////////////////////////////////////////////////     JOB MENU     ///////////////////////////////////////////////////////////////////////////
 
+def jobMenu():
+    
+    while True:
+        print("\nJob search/internship.\n")
 
+        printJobMenu()
+        #creates a database for jobs if one doesnt exist.
+        create_job_table()
 
+        select = input("Enter Command: ")
 
-def searchPeople():
-    print("\nSearch For A Person.\n")
-
-    print("Please enter the first and last name of the person you wish to search for.\n")
-
-    firstName = input("Enter first name: ")
-    lastName = input("Enter last name: ")
-
-    print(firstName, lastName)
+        if select == "1":
+            postJob(logged_in[0], logged_in[1])
+        elif select == "0":
+            break
+        else:
+            printInvalidEntry()
 
     return
+
+#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
