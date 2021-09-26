@@ -1,29 +1,67 @@
-import pandas as pd
+import sqlite3
+from getpass import getpass
 
-# This function looks for the given username and password in the CSV file
-def find_account(findUsername, findPassword):
-    # get all the accounts from the csv file
-    accounts = pd.read_csv('accounts.csv', index_col=0, squeeze=True, header=None).to_dict()
+conn = sqlite3.connect('Accounts.db')
+c = conn.cursor()
 
-    # initialize temp values to False
-    un = False
-    pw = False
+#/////////////////////////////////////////////////////////////////////////     CREATE DB     //////////////////////////////////////////////////////////////////////////////
 
-    # look for username in accounts dict
-    for u in accounts.keys():
-        if u == findUsername:
-            un = True  # change value of un to True if found
+#table creation for Username table ?
+def create_table():
+    #SQL
+    query = """CREATE TABLE IF NOT EXISTS Accounts(username TEXT, password TEXT,firstname TEXT,lastname TEXT)"""
+    c.execute(query)
+    conn.commit()
 
-    # look for password in accounts dict
-    for p in accounts.values():
-        if p == findPassword:
-            pw = True  # change value of pw to True if found
+#/////////////////////////////////////////////////////////////////////////     ENTER DATA INTO DB     ////////////////////////////////////////////////////////////////////
 
-    return pw and un
+#inserts login info from user into table
+def data_entry(username, password,firstname,lastname):
+    #SQL
+    query = """INSERT INTO Accounts (username, password,firstname,lastname) VALUES(?, ?,?,?);"""
+    
+    #Stores username, password , firstname , lastname 
+    data = (username, password,firstname,lastname)
+    c.execute(query, data)
+    conn.commit()
 
+#/////////////////////////////////////////////////////////////////////////     LOGIN ATTEMPT    //////////////////////////////////////////////////////////////////////////
 
+#Login attempt for exciting account 
+def login(username, password):
+    #SQL
+    query = """SELECT * FROM Accounts WHERE username = ? AND password = ?;"""
+    data = (username, password)
 
+    c.execute(query, data)
+    conn.commit()
+    tuple = c.fetchall()
+   
+    return len(tuple) != 0
 
+#/////////////////////////////////////////////////////////////////////////     NUMBER OF ACCOUNTS     ///////////////////////////////////////////////////////////////////////
+
+#number of accounts created 
+def number_rows():
+    #SQL
+    query = """SELECT * FROM Accounts"""
+    c.execute(query)
+    conn.commit()
+    
+    rows = len(c.fetchall())
+    return rows
+
+#/////////////////////////////////////////////////////////////////////////     CHECK UNIQUE USERNAME     ////////////////////////////////////////////////////////////////////
+
+#search for exciting User 
+def unique_user(username):
+    
+    for row in c.execute("""SELECT * FROM Accounts"""):
+        if username == row[0]:
+            return True
+    return False
+
+#/////////////////////////////////////////////////////////////////////////     CHECK PASSWORD    ///////////////////////////////////////////////////////////////////////////
 
 # Function to validate the password
 def password_check(passwd):
@@ -65,3 +103,5 @@ def password_check(passwd):
     # if val:
     #     return val
     return val
+
+#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
