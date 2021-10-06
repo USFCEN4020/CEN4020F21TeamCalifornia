@@ -63,16 +63,15 @@ def update_ad_option(username, password):
 
 #/////////////////////////////////////////////////////////////////////////     UPDATE LANGUAGE OPTION     /////////////////////////////////////////////////////////////////////////
 
-def update_lang_option(username, password):
-    for row in c.execute("""SELECT * FROM Accounts"""):
-        if username == row[0]:
-            if row[7] == "English":
-                query = """UPDATE Accounts SET language = "Spanish" WHERE username = ? AND password = ?;"""
-                print("\n Language is now Spanish.\n")
-            elif row[7] == "Spanish":
-                query = """UPDATE Accounts SET language = "English" WHERE username = ? AND password = ?;"""
-                print("\n Language is now English.\n")
-            
+def update_lang_option(username, password, lang):
+    
+    if(lang == "English"):
+        query = """UPDATE Accounts SET language = "English" WHERE username = ? AND password = ?;"""
+        print("\n Language is now English.\n")
+    elif(lang == "Spanish"):
+        query = """UPDATE Accounts SET language = "Spanish" WHERE username = ? AND password = ?;"""
+        print("\n Language is now Spanish.\n")
+
     data = (username, password)        
     c.execute(query, data)
     conn.commit()

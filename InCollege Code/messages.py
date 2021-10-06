@@ -129,7 +129,8 @@ def printGuestControlMenu():
 def printLanguageMenu():
     
     print("Language Menu\n"
-          "(1) Change Language\n"
+          "(1) Change Language to English\n"
+          "(2) Change Language to Spanish\n"
           "(0) Return to Previous Menu\n")
     return
 

@@ -208,23 +208,23 @@ def impLinksMenu():
         if int(opt) == 1:
             usefulGeneralGroup()
         elif int(opt) == 2:
-            printUnderConstruction()
+            print("In College: Welcome to In College, the world's largest college student network with many users in many countries and territories worldwide\n")
         elif int(opt) == 3:
-            printUnderConstruction()
+            print("The assessibiliy of our app is not limited\n")
         elif int(opt) == 4:
-            printUnderConstruction()
+            print("User need to agree terms to join in this application\n")
         elif int(opt) == 5:
             privacyPolicyMenu()
         elif int(opt) == 6:
-            printUnderConstruction()
+            print("User need to accept the cookie policy\n")
         elif int(opt) == 7:
-            printUnderConstruction()
+            print("User will need to acknowledge the copyright policy\n")
         elif int(opt) == 8:
-            printUnderConstruction()
+            print("User will need to acknowledge the brand policy\n")
         elif int(opt) == 9:
             guestControlMenu()
         elif int(opt) == 10:
-            printUnderConstruction() #languages menu
+            languageMenu() 
         elif int(opt) == 0:
             break
         else:
@@ -249,7 +249,7 @@ def usefulGeneralGroup():
         elif int(opt) == 3:
             print("In College: Welcome to In College, the world's largest college student network with many users in many countries and territories worldwide")
         elif int(opt) == 4:
-            print( "In College Pressroom: Stay on top of the latest news, updates, and reports")
+            print("In College Pressroom: Stay on top of the latest news, updates, and reports")
         elif int(opt) == 5:
             printUnderConstruction()
         elif int(opt) == 6:
@@ -302,7 +302,7 @@ def guestControlMenu():
             elif int(opt) == 3:
                 update_ad_option(logged_in[0], logged_in[1])
             elif int(opt) == 4:
-                update_lang_option(logged_in[0], logged_in[1])
+                languageMenu()
             elif int(opt) == 0:
                 break
             else:
@@ -312,16 +312,23 @@ def guestControlMenu():
 # /////////////////////////////////////////////////////////////////////////     LANGUAGE MENU     //////////////////////////////////////////////////////////////////////////
 
 def languageMenu():
-    while True:
-        printLanguageMenu()
+    if logged_in == []:
+        print("\n Please login to change settings.\n") 
+    else:
+        while True:
+            printLanguageMenu()
 
-        # gets user input
-        opt = input("Enter command: ")
+            # gets user input
+            opt = input("Enter command: ")
 
-        if int(opt) == 1:
-            update_lang_option(logged_in[0], logged_in[1])
-        elif int(opt) == 2:
-            break
+            if int(opt) == 1:
+                update_lang_option(logged_in[0], logged_in[1], "English")
+            elif int(opt) == 2:
+                update_lang_option(logged_in[0], logged_in[1], "Spanish")
+            elif int(opt) == 0:
+                break
+            else:
+                printInvalidEntry()
     return
 
 #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
