@@ -6,8 +6,41 @@ from search import *
 from jobs import *
 #imports all functions from update_acc.py
 from update_acc import *
+#imports all functions from personalProfile.py
+from personalProfile import *
 
 logged_in = []
+
+#/////////////////////////////////////////////////////////////////////////     LOGIN MENU     /////////////////////////////////////////////////////////////////////////
+
+def loginMenu():
+    
+    print("\nLog In to InCollege\n")
+    
+    create_table()
+    
+    if number_rows() == 0:
+        print("No users in the system. Please create an account.")
+        return
+
+    found = False
+
+    while not found:  # continue looping as long as user inputs invalid login info
+        # get input from the user
+        username = input("Enter username: ")
+        password = input("Enter password: ")
+
+        # check if username and password are valid
+        found = login(username, password)
+        if not found:
+            print("Incorrect username/password, please try again\n")
+    print("\nYou have successfully logged in\n")
+    global logged_in
+    #gets the first and last name of the current user that is logged in
+    logged_in = current_user(username, password)
+    mainMenu()
+
+
 
 #/////////////////////////////////////////////////////////////////////////     HOME MENU     /////////////////////////////////////////////////////////////////////////
 
@@ -20,7 +53,7 @@ def homeMenu():
     while True:   
         #prints the home menu
         printHomeMenu()
-
+        
         #gets user input
         select = input("Enter command: ")
 
@@ -49,34 +82,6 @@ def homeMenu():
     else:
         printInvalidEntry()
 
-#/////////////////////////////////////////////////////////////////////////     LOGIN MENU     /////////////////////////////////////////////////////////////////////////
-
-def loginMenu():
-    
-    print("\nLog In to InCollege\n")
-    
-    create_table()
-    
-    if number_rows() == 0:
-        print("No users in the system. Please create an account.")
-        return
-
-    found = False
-
-    while not found:  # continue looping as long as user inputs invalid login info
-        # get input from the user
-        username = input("Enter username: ")
-        password = input("Enter password: ")
-
-        # check if username and password are valid
-        found = login(username, password)
-        if not found:
-            print("Incorrect username/password, please try again\n")
-    print("\nYou have successfully logged in\n")
-    global logged_in 
-    #gets the first and last name of the current user that is logged in
-    logged_in = current_user(username, password)
-    mainMenu()
 
 #/////////////////////////////////////////////////////////////////////     CREATE ACCOUNT MENU     ////////////////////////////////////////////////////////////////////
 
@@ -105,8 +110,9 @@ def createAccountMenu():
 def mainMenu():
     
     while True:
+        global logged_in
         #prints the main menu
-        printMainMenu()
+        printMainMenu(logged_in[0])
         #gets user input
         opt = input("Enter command: ")
 
@@ -120,8 +126,15 @@ def mainMenu():
             usefulLinksMenu()
         elif int(opt) == 5:
             impLinksMenu()
+        elif int(opt) == 6:
+            if hasProfile(logged_in[0]):
+                #update/edit profile Function goes here
+                None # temp value for code to work
+            else:
+                #Creates profile if one does not exist.
+                createProfileMenu()
         elif int(opt) == 0:
-            global logged_in
+            
             logged_in = []
             print("You have sucessfully logged out!\n")
             break
@@ -331,4 +344,117 @@ def languageMenu():
                 printInvalidEntry()
     return
 
+#/////////////////////////////////////////////////////////////////////////////     Create Job Menu     //////////////////////////////////////////////////////////////////
+
+def createJobMenu(jobId):
+    create_job(logged_in,jobId)
+
+    title = input("enter Title for profile or 0 to quit: ")
+    if title == '0':
+        return 0
+    update_job(logged_in[0],jobId,'title',title)
+
+    employer = input("Enter your employer or 0 to quit: ")
+    if employer == '0':
+        return 1
+    
+    update_job(logged_in[0],jobId,"employer",employer)
+
+    dateStart = input("Enter the Date you started the job or 0 to quit: ")
+    if dateStart == '0':
+        return 2
+
+    update_job(logged_in[0],jobId,'dateStart',dateStart)
+
+    dateEnd = input("Enter the Date you ended the job or 0 to quit: ")
+    if dateEnd == '0':
+        return 3
+
+    update_job(logged_in[0],jobId,'dateEnd',dateEnd)
+
+    location = input("Enter the location of the job or 0 to quit: ")
+    if location == '0':
+        return 4
+    update_job(logged_in[0],jobId,'location',location)
+    
+    description = input("Enter a description for the job or 0 to quit: ")
+    if description == '0':
+        return 2
+    
+    update_job(logged_in[0],jobId,'description',description)
+
+
+#/////////////////////////////////////////////////////////////////////////////////////   Create School Menu   /////////////////////////////////////////////////////////////
+
+def createSchoolMenu():
+    create_school(logged_in[0])
+    schoolName = input("Enter the Name for your school or 0 to quit: ")
+    if schoolName == '0':
+        return 0
+    update_school(logged_in[0],"schoolName",schoolName)
+    degree = input("Enter the degree you got from your school or 0 to quit: ")
+    if degree == '0':
+        return 1
+    update_school(logged_in[0],"degree",degree)
+    yearsAttended = input("Enter the number of years you attened the school or 0 to quit: ")
+    if yearsAttended == '0':
+        return 2
+    update_school(logged_in[0],"yearsAttended",int(yearsAttended))
+    
+    return 3
+
+
+#///////////////////////////////////////////////////////////////////////////////////////    Create Profile Menu    ///////////////////////////////////////////////////////
+
+def createProfileMenu():
+    create_profile(logged_in[0])
+    
+    title = input("enter Title for profile or 0 to quit: ")
+    if title == '0':
+        return 0
+    update_profile(logged_in[0],'title',title)
+
+    major = input("Enter your Major or 0 to quit: ")
+    if major == '0':
+        return 1
+    
+    major = formatCaps(major)
+
+    update_profile(logged_in[0],"major",major)
+
+    uniName = input("Enter Name of your University or 0 to quit: ")
+    if uniName == '0':
+        update_profile(title,major,None,None)
+        return 2
+
+    uniName = formatCaps(uniName)
+
+    update_profile(logged_in[0],"universityName",uniName)
+
+    about = input("Enter info about you or 0 to quit: ")
+    if about == '0':
+        
+        return 3 
+
+    update_profile(logged_in[0],"about",about)
+
+    jobOption = input("You can create up to three jobs, would you like to create one?\n(y or n): ")
+    if jobOption == 'y':
+        createJobMenu(1)
+        jobOption = input("Would you like to create a second job?\n(y,n): ")
+        if jobOption == 'y':
+            createJobMenu(2)
+            jobOption = input("Would you like to create a third job?\n(y,n): ")
+            if jobOption == 'y':
+                createJobMenu(3)
+    
+    schoolOption = input("Would you like to enter a school? \n(y or n): ")
+    if(schoolOption == 'y'):
+        createSchoolMenu()
+    return 4
+
 #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+

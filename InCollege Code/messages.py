@@ -1,3 +1,4 @@
+from personalProfile import *
 
 #/////////////////////////////////////////////////////////////////////////     PRINT SUCCESS STORY     /////////////////////////////////////////////////////////////////////////
 
@@ -34,14 +35,25 @@ def printUnderConstruction():
 
 #/////////////////////////////////////////////////////////////////////////     PRINT MAIN MENU    /////////////////////////////////////////////////////////////////////////////
 
-def printMainMenu():
-    print("InCollege Main Menu\n"
-          "(1) Job search / internship\n"
-          "(2) Find someone you know\n"
-          "(3) Learn a new skill\n"
-          "(4) Useful Links\n"
-          "(5) Important Links\n"
-          "(0) Logout\n")
+def printMainMenu(userName):
+    if hasProfile(userName):
+        print("InCollege Main Menu\n"
+            "(1) Job search / internship\n"
+            "(2) Find someone you know\n"
+            "(3) Learn a new skill\n"
+            "(4) Useful Links\n"
+            "(5) Important Links\n"
+            "(6)Edit Personal Profile"
+            "(0) Logout\n")
+    else:
+        print("InCollege Main Menu\n"
+            "(1) Job search / internship\n"
+            "(2) Find someone you know\n"
+            "(3) Learn a new skill\n"
+            "(4) Useful Links\n"
+            "(5) Important Links\n"
+            "(6)Create Personal Profile"
+            "(0) Logout\n")
     return 0
 
 #/////////////////////////////////////////////////////////////////////////     PRINT SKILL LIST     ///////////////////////////////////////////////////////////////////////////

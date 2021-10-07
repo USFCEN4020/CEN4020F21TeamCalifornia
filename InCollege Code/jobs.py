@@ -1,5 +1,6 @@
 import sqlite3
 from getpass import getpass
+from sqlite3.dbapi2 import Error
 
 conn = sqlite3.connect('Jobs.db')
 c = conn.cursor()
@@ -18,7 +19,7 @@ def create_job_table():
 #inserts login info from user into table
 def job_data_entry(title, description, employer, location, salary, posterfirst, posterlast):
     #SQL
-    query = """INSERT INTO Jobs (title, description, employer, location, salary, posterfirst, posterlast) VALUES(?, ?, ?, ?, ?, ?, ?);"""
+    query = """INSERT INTO Jobs(title, description, employer, location, salary, posterfirst, posterlast) VALUES(?, ?, ?, ?, ?, ?, ?);"""
     
     #Stores username, password , firstname , lastname 
     data = (title, description, employer, location, salary, posterfirst, posterlast)
@@ -30,11 +31,15 @@ def job_data_entry(title, description, employer, location, salary, posterfirst, 
 #number of jobs created 
 def job_created():
     #SQL
-    query = """SELECT * FROM Jobs"""
-    c.execute(query)
-    conn.commit()
-    
-    rows = len(c.fetchall())
+    rows = -1
+    try:
+        query = """SELECT * FROM Jobs"""
+        c.execute(query)
+        conn.commit()
+        
+        rows = len(c.fetchall())
+    except Error:
+        rows = 0
     return rows
 
 #/////////////////////////////////////////////////////////////////////////     POST A JOB    ////////////////////////////////////////////////////////////////////////////
@@ -43,6 +48,8 @@ def postJob(posterfirst, posterlast):
     
     print("\nPost A Job.\n")
 
+    ExistingJobs = 0
+    
     if job_created() < 5:
         title = input("Enter Job Title: ")
         description = input("Enter Job Description: ")
