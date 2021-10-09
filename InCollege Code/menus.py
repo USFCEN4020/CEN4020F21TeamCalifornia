@@ -50,6 +50,9 @@ def homeMenu():
     #prints the student success story found on messages.py
     printStudentSuccess()
     
+    #Creates a database for the profiles if one doesnt exisit
+    create_profile_table()
+    
     while True:   
         #prints the home menu
         printHomeMenu()

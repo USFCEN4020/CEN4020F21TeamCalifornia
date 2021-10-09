@@ -5,7 +5,7 @@ conn = sqlite3.connect('PersonalProfile.db')
 c = conn.cursor()
 
 #Creates the Job DataBase with Tables if it does not exist
-def create_job_table():
+def create_profile_table():
     #SQL
     query = """CREATE TABLE IF NOT EXISTS PersonalProfile(userName TEXT,title TEXT, major TEXT, universityName TEXT, about TEXT)"""
     c.execute(query)
@@ -20,11 +20,55 @@ def create_job_table():
 
 #Returns True if User is in Personal Profile Database
 def hasProfile(userName):
-    for row in c.execute("""SELECT * FROM PersonalProfile"""):
-        if(userName == row[0]):
-            return True
+    query = """SELECT * FROM PersonalProfile WHERE userName = ?"""
+    data = (userName)
+    c.execute(query, [data])
+    x = c.fetchall()
+    if x != []:
+        return True
+
     return False
 
+def getProfile(userName):
+    query = """SELECT * FROM PersonalProfile WHERE userName = ?"""
+    data = (userName)
+    c.execute(query,[data])
+    profile = c.fetchall()
+    return profile
+
+def hasJob(userName,jobId):
+    query = """SELECT * FROM expierience WHERE userName = ? AND jobId = ?"""
+    data = (userName,jobId)
+    c.execute(query,data)
+    x = c.fetchall()
+    if x != []:
+        return True
+
+    return False
+
+def getJob(userName, jobId):
+    query = """SELECT * FROM expierience WHERE userName = ? AND jobId = ?"""
+    data = (userName,jobId)
+    c.execute(query,data)
+    job = c.fetchall()
+    return job
+
+def hasSchool(userName):
+    query = """SELECT * FROM education WHERE userName = ?"""
+    data = (userName)
+    c.execute(query,[data])
+    x = c.fetchall()
+    if x != []:
+        return True
+
+    return False
+
+def getSchool(userName):
+    query = """SELECT * FROM education WHERE userName = ?"""
+    data = (userName)
+    c.execute(query,[data])
+    school = c.fetchall()
+    return school
 
 #Allows a field in the personal profile table to be updated given username and section
 def update_profile(userName,section, newValue):
@@ -117,9 +161,3 @@ def create_profile(userName):
     data = (userName,None,None,None,None) 
     c.execute(query,data)
     conn.commit()
-
-
-
-    
-    
-
