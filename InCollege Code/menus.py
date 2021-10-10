@@ -132,7 +132,7 @@ def mainMenu():
         elif int(opt) == 6:
             if hasProfile(logged_in[0]):
                 #update/edit profile Function goes here
-                None # temp value for code to work
+                editProfile() # temp value for code to work
             else:
                 #Creates profile if one does not exist.
                 createProfileMenu()
@@ -350,7 +350,7 @@ def languageMenu():
 #/////////////////////////////////////////////////////////////////////////////     Create Job Menu     //////////////////////////////////////////////////////////////////
 
 def createJobMenu(jobId):
-    create_job(logged_in,jobId)
+    create_job(logged_in[0],jobId)
 
     title = input("enter Title for profile or 0 to quit: ")
     if title == '0':
@@ -455,6 +455,273 @@ def createProfileMenu():
     if(schoolOption == 'y'):
         createSchoolMenu()
     return 4
+
+def updateJobMenu(jobId):
+    title = input("enter Title for profile or 0 to quit: ")
+    if title == '0':
+        return 0
+    update_job(logged_in[0], jobId, 'title', title)
+
+    employer = input("Enter your employer or 0 to quit: ")
+    if employer == '0':
+        return 1
+
+    update_job(logged_in[0], jobId, "employer", employer)
+
+    dateStart = input("Enter the Date you started the job or 0 to quit: ")
+    if dateStart == '0':
+        return 2
+
+    update_job(logged_in[0], jobId, 'dateStart', dateStart)
+
+    dateEnd = input("Enter the Date you ended the job or 0 to quit: ")
+    if dateEnd == '0':
+        return 3
+
+    update_job(logged_in[0], jobId, 'dateEnd', dateEnd)
+
+    location = input("Enter the location of the job or 0 to quit: ")
+    if location == '0':
+        return 4
+    update_job(logged_in[0], jobId, 'location', location)
+
+    description = input("Enter a description for the job or 0 to quit: ")
+    if description == '0':
+        return 2
+
+    update_job(logged_in[0], jobId, 'description', description)
+
+def updateSchool():
+    schoolName = input("Enter the Name for your school or 0 to quit: ")
+    if schoolName == '0':
+        return 0
+    update_school(logged_in[0], "schoolName", schoolName)
+    degree = input("Enter the degree you got from your school or 0 to quit: ")
+    if degree == '0':
+        return 1
+    update_school(logged_in[0], "degree", degree)
+    yearsAttended = input("Enter the number of years you attened the school or 0 to quit: ")
+    if yearsAttended == '0':
+        return 2
+    update_school(logged_in[0], "yearsAttended", int(yearsAttended))
+
+    return 3
+
+def updateProfile():
+    opt = input(
+        'Enter the command number of the part to update: (1) Title, (2) Major, (3) University Name, (4) About, (5)Job1, (6) Job2, (7) Job3, (8) Education ')
+
+    if int(opt) == 1:
+        title = input("enter Title for profile or 0 to quit: ")
+        if title == '0':
+            return 0
+        update_profile(logged_in[0], 'title', title)
+    elif int(opt) == 2:
+        major = input("Enter your Major or 0 to quit: ")
+        if major == '0':
+            return 1
+
+        major = formatCaps(major)
+
+        update_profile(logged_in[0], "major", major)
+    elif int(opt) == 3:
+        uniName = input("Enter Name of your University or 0 to quit: ")
+        if uniName == '0':
+            return 2
+
+        uniName = formatCaps(uniName)
+
+        update_profile(logged_in[0], "universityName", uniName)
+    elif int(opt) == 4:
+        about = input("Enter info about you or 0 to quit: ")
+        if about == '0':
+            return 3
+
+        update_profile(logged_in[0], "about", about)
+    elif int(opt) == 5:
+        updateJobMenu(1)
+    elif int(opt) == 6:
+        updateJobMenu(2)
+    elif int(opt) == 7:
+        updateJobMenu(3)
+    elif int(opt) == 8:
+        updateSchool()
+    else:
+        printInvalidEntry()
+    return 0
+
+def editProfile():
+
+    userName = logged_in[0]
+
+    update = input("Would you like to UPDATE or continue to CREATE profile where you left off? (Type update or create)")
+    if update == 'update':
+        updateProfile()
+        return 0
+
+    if(checkTitle(userName) == False):
+        title = input("enter Title for profile or 0 to quit: ")
+        if title == '0':
+            return 0
+        update_profile(logged_in[0], 'title', title)
+
+        major = input("Enter your Major or 0 to quit: ")
+        if major == '0':
+            return 1
+
+        major = formatCaps(major)
+
+        update_profile(logged_in[0], "major", major)
+
+        uniName = input("Enter Name of your University or 0 to quit: ")
+        if uniName == '0':
+            return 2
+
+        uniName = formatCaps(uniName)
+
+        update_profile(logged_in[0], "universityName", uniName)
+
+        about = input("Enter info about you or 0 to quit: ")
+        if about == '0':
+            return 3
+
+        update_profile(logged_in[0], "about", about)
+
+        jobOption = input("You can create up to three jobs, would you like to create one?\n(y or n): ")
+        if jobOption == 'y':
+            createJobMenu(1)
+            jobOption = input("Would you like to create a second job?\n(y,n): ")
+            if jobOption == 'y':
+                createJobMenu(2)
+                jobOption = input("Would you like to create a third job?\n(y,n): ")
+                if jobOption == 'y':
+                    createJobMenu(3)
+
+        schoolOption = input("Would you like to enter a school? \n(y or n): ")
+        if (schoolOption == 'y'):
+            createSchoolMenu()
+
+    elif checkMajor(userName) == False:
+        major = input("Enter your Major or 0 to quit: ")
+        if major == '0':
+            return 1
+
+        major = formatCaps(major)
+
+        update_profile(logged_in[0], "major", major)
+
+        uniName = input("Enter Name of your University or 0 to quit: ")
+        if uniName == '0':
+            return 2
+
+        uniName = formatCaps(uniName)
+
+        update_profile(logged_in[0], "universityName", uniName)
+
+        about = input("Enter info about you or 0 to quit: ")
+        if about == '0':
+            return 3
+
+        update_profile(logged_in[0], "about", about)
+
+        jobOption = input("You can create up to three jobs, would you like to create one?\n(y or n): ")
+        if jobOption == 'y':
+            createJobMenu(1)
+            jobOption = input("Would you like to create a second job?\n(y,n): ")
+            if jobOption == 'y':
+                createJobMenu(2)
+                jobOption = input("Would you like to create a third job?\n(y,n): ")
+                if jobOption == 'y':
+                    createJobMenu(3)
+
+        schoolOption = input("Would you like to enter a school? \n(y or n): ")
+        if (schoolOption == 'y'):
+            createSchoolMenu()
+    elif checkUniversityName(userName) == False:
+        uniName = input("Enter Name of your University or 0 to quit: ")
+        if uniName == '0':
+            return 2
+
+        uniName = formatCaps(uniName)
+
+        update_profile(logged_in[0], "universityName", uniName)
+
+        about = input("Enter info about you or 0 to quit: ")
+        if about == '0':
+            return 3
+
+        update_profile(logged_in[0], "about", about)
+
+        jobOption = input("You can create up to three jobs, would you like to create one?\n(y or n): ")
+        if jobOption == 'y':
+            createJobMenu(1)
+            jobOption = input("Would you like to create a second job?\n(y,n): ")
+            if jobOption == 'y':
+                createJobMenu(2)
+                jobOption = input("Would you like to create a third job?\n(y,n): ")
+                if jobOption == 'y':
+                    createJobMenu(3)
+
+        schoolOption = input("Would you like to enter a school? \n(y or n): ")
+        if (schoolOption == 'y'):
+            createSchoolMenu()
+    elif checkAbout(userName) == False:
+        about = input("Enter info about you or 0 to quit: ")
+        if about == '0':
+            return 3
+
+        update_profile(logged_in[0], "about", about)
+
+        jobOption = input("You can create up to three jobs, would you like to create one?\n(y or n): ")
+        if jobOption == 'y':
+            createJobMenu(1)
+            jobOption = input("Would you like to create a second job?\n(y,n): ")
+            if jobOption == 'y':
+                createJobMenu(2)
+                jobOption = input("Would you like to create a third job?\n(y,n): ")
+                if jobOption == 'y':
+                    createJobMenu(3)
+
+        schoolOption = input("Would you like to enter a school? \n(y or n): ")
+        if (schoolOption == 'y'):
+            createSchoolMenu()
+    elif checkJob(userName) == 0:
+        jobOption = input("You can create up to three jobs, would you like to create one?\n(y or n): ")
+        if jobOption == 'y':
+            createJobMenu(1)
+            jobOption = input("Would you like to create a second job?\n(y,n): ")
+            if jobOption == 'y':
+                createJobMenu(2)
+                jobOption = input("Would you like to create a third job?\n(y,n): ")
+                if jobOption == 'y':
+                    createJobMenu(3)
+        schoolOption = input("Would you like to enter a school? \n(y or n): ")
+        if (schoolOption == 'y'):
+            createSchoolMenu()
+    elif checkJob(userName) == 1:
+            jobOption = input("Would you like to create a second job?\n(y,n): ")
+            if jobOption == 'y':
+                createJobMenu(2)
+                jobOption = input("Would you like to create a third job?\n(y,n): ")
+                if jobOption == 'y':
+                    createJobMenu(3)
+    elif checkJob(userName) == 2:
+                jobOption = input("Would you like to create a third job?\n(y,n): ")
+                if jobOption == 'y':
+                    createJobMenu(3)
+                schoolOption = input("Would you like to enter a school? \n(y or n): ")
+                if (schoolOption == 'y'):
+                    createSchoolMenu()
+    elif checkJob(userName) == 2 and checkSchool(userName) == False:
+        schoolOption = input("Would you like to enter a school? \n(y or n): ")
+        if (schoolOption == 'y'):
+            createSchoolMenu()
+
+    return 0
+
+
+
+
 
 #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

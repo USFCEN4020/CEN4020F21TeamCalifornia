@@ -10,7 +10,7 @@ def create_profile_table():
     query = """CREATE TABLE IF NOT EXISTS PersonalProfile(userName TEXT,title TEXT, major TEXT, universityName TEXT, about TEXT)"""
     c.execute(query)
     conn.commit()
-    query = """CREATE TABLE IF NOT EXISTS expierience(userName TEXT, jobId INT, title TEXT, employer TEXT, dateStart Text, dateEnd Text, location TEXT, description TEXT)"""
+    query = """CREATE TABLE IF NOT EXISTS expierience(userName TEXT, jobId INT, title TEXT, employer TEXT, dateStart TEXT, dateEnd TEXT, location TEXT, description TEXT)"""
     c.execute(query)
     conn.commit()
     query = """CREATE TABLE IF NOT EXISTS education(userName TEXT, schoolName TEXT, degree TEXT, yearsAttended INT)"""
@@ -142,9 +142,9 @@ def formatCaps(str):
 
 #inserts username into job table, jobId should be labeled 1-3
 def create_job(userName,jobId):
-    query = """INSERT INTO expierience(userName , jobId , title , employer , dateStart , dateEnd , location , description ) VALUES(?,?,?,?,?,?,?,?)"""
+    query = """INSERT INTO expierience(userName , jobId , title , employer , dateStart , dateEnd , location , description ) VALUES(? , ? , ? , ? , ? , ? , ? , ? )"""
     data = (userName,jobId,None,None,None,None,None,None) 
-    c.execute(query,data)
+    c.execute(query, data)
     conn.commit() 
 
 
@@ -161,3 +161,35 @@ def create_profile(userName):
     data = (userName,None,None,None,None) 
     c.execute(query,data)
     conn.commit()
+
+def checkTitle(userName):
+    for row in c.execute("""SELECT * FROM personalProfile"""):
+        if userName == row[0] and row[1] != None:
+            return True
+    return False
+def checkMajor(userName):
+    for row in c.execute("""SELECT * FROM personalProfile"""):
+        if userName == row[0] and row[2] != None:
+            return True
+    return False
+def checkUniversityName(userName):
+    for row in c.execute("""SELECT * FROM personalProfile"""):
+        if userName == row[0] and row[3] != None:
+            return True
+    return False
+def checkAbout(userName):
+    for row in c.execute("""SELECT * FROM personalProfile"""):
+        if userName == row[0] and row[4] != None:
+            return True
+    return False
+def checkJob(userName):
+    numjob = 0
+    for row in c.execute("""SELECT * FROM experience"""):
+        if userName == row[0] and row[1] != None:
+            numjob +=1
+    return numjob
+def checkSchool(userName):
+    for row in c.execute("""SELECT * FROM education"""):
+        if userName == row[0]and row[1] != None:
+            return True
+    return False
