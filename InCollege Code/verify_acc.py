@@ -105,3 +105,9 @@ def password_check(passwd):
     return val
 
 #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+def getAccountInfo(username):
+    # get all the information associated with the given username
+    query = """SELECT * FROM Accounts WHERE username = ?"""
+    data = [username]
+    return c.execute(query, data)

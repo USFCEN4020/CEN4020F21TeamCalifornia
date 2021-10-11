@@ -43,7 +43,8 @@ def printMainMenu(userName):
             "(3) Learn a new skill\n"
             "(4) Useful Links\n"
             "(5) Important Links\n"
-            "(6)Edit Personal Profile"
+            "(6) Edit Personal Profile\n"
+            "(7) View Personal Profile\n"
             "(0) Logout\n")
     else:
         print("InCollege Main Menu\n"
@@ -52,7 +53,7 @@ def printMainMenu(userName):
             "(3) Learn a new skill\n"
             "(4) Useful Links\n"
             "(5) Important Links\n"
-            "(6)Create Personal Profile\n"
+            "(6) Create Personal Profile\n"
             "(0) Logout\n")
     return 0
 

@@ -193,3 +193,24 @@ def checkSchool(userName):
         if userName == row[0]and row[1] != None:
             return True
     return False
+
+def getProfileInfo(userName):
+    # get all the information related to the given username
+    query ="""SELECT * FROM personalProfile WHERE userName=?"""
+    data = [userName]
+
+    return c.execute(query, data)
+
+def getExperienceInfo(userName):
+    # get all the information related to the given username
+    query = """SELECT * FROM expierience WHERE userName=?"""
+    data = [userName]
+
+    return c.execute(query, data)
+
+def getEducationInfo(userName):
+    # get all the information related to the given username
+    query = """SELECT * FROM education WHERE userName=?"""
+    data = [userName]
+
+    return c.execute(query, data)

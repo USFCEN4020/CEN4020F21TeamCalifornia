@@ -136,6 +136,11 @@ def mainMenu():
             else:
                 #Creates profile if one does not exist.
                 createProfileMenu()
+        elif int(opt) == 7:
+            if hasProfile(logged_in[0]):
+                viewProfile()
+            else:
+                print("You have not created a profile. Please create one first.\n")
         elif int(opt) == 0:
             
             logged_in = []
@@ -554,7 +559,7 @@ def editProfile():
 
     userName = logged_in[0]
 
-    update = input("Would you like to UPDATE or continue to CREATE profile where you left off? (Type update or create)")
+    update = input("Would you like to UPDATE or continue to CREATE profile where you left off? (Type update or create): ")
     if update == 'update':
         updateProfile()
         return 0
@@ -719,10 +724,37 @@ def editProfile():
 
     return 0
 
+# displays the profile of the currently logged in user
+def viewProfile():
+    profileData = getProfileInfo(logged_in[0]).fetchall()[0]
+    accountData = getAccountInfo(logged_in[0]).fetchall()[0]
+    jobData = getExperienceInfo(logged_in[0]).fetchall()
+    educData = getEducationInfo(logged_in[0]).fetchall()
 
+    print("\n\t\t" + accountData[2] + " " + accountData[3] + "\n") # display the full name
+    print(profileData[1] + "\nMajor: " + profileData[2]) # display title and major
+    print("School: " + profileData[3] + "\nAbout: " + profileData[4] + "\n") # display school and about
 
+    # if there is job experience, display job experience
+    if(len(jobData) > 0):
+        print("Experience:\n")
+        for d in jobData: # iterate through all the jobs from the database
+            print("\t" + d[2] +
+                  "\n\t" + d[3] +
+                  "\n\tStart: " + d[4] +
+                  "\n\tEnd: " + d[5] +
+                  "\n\t" + d[6] +
+                  "\n\t" + d[7] + "\n")
 
+    # if there is education saved in database, display education
+    if (len(educData) > 0):
+        for d in educData:
+            print("Education:\n" +
+                  "\tSchool Name: " + d[1] +
+                  "\n\tDegree: " + d[2] +
+                  "\n\tYears attended:" + str(d[3]) + "\n")
 
+    return
 #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
