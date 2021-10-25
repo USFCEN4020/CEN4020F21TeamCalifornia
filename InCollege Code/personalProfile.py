@@ -1,22 +1,8 @@
 import sqlite3
 from getpass import getpass
 
-conn = sqlite3.connect('PersonalProfile.db')
+conn = sqlite3.connect('InCollege.db')
 c = conn.cursor()
-
-#Creates the Job DataBase with Tables if it does not exist
-def create_profile_table():
-    #SQL
-    query = """CREATE TABLE IF NOT EXISTS PersonalProfile(userName TEXT,title TEXT, major TEXT, universityName TEXT, about TEXT)"""
-    c.execute(query)
-    conn.commit()
-    query = """CREATE TABLE IF NOT EXISTS expierience(userName TEXT, jobId INT, title TEXT, employer TEXT, dateStart TEXT, dateEnd TEXT, location TEXT, description TEXT)"""
-    c.execute(query)
-    conn.commit()
-    query = """CREATE TABLE IF NOT EXISTS education(userName TEXT, schoolName TEXT, degree TEXT, yearsAttended INT)"""
-    c.execute(query)
-    conn.commit() 
-
 
 #Returns True if User is in Personal Profile Database
 def hasProfile(userName):
@@ -194,20 +180,21 @@ def checkSchool(userName):
             return True
     return False
 
+# get all the personal profile info related to the given username
 def getProfileInfo(userName):
-    # get all the information related to the given username
     query ="""SELECT * FROM personalProfile WHERE userName=?"""
     data = [userName]
 
     return c.execute(query, data)
 
+# get all the experience info related to the given username
 def getExperienceInfo(userName):
-    # get all the information related to the given username
     query = """SELECT * FROM expierience WHERE userName=?"""
     data = [userName]
 
     return c.execute(query, data)
 
+# get all the education infor related to the given username
 def getEducationInfo(userName):
     # get all the information related to the given username
     query = """SELECT * FROM education WHERE userName=?"""

@@ -1,18 +1,43 @@
 import sqlite3
 from getpass import getpass
 
-conn = sqlite3.connect('Accounts.db')
+conn = sqlite3.connect('InCollege.db')
 c = conn.cursor()
 
 #/////////////////////////////////////////////////////////////////////////     CREATE DB     //////////////////////////////////////////////////////////////////////////////
 
 #table creation for Username table ?
-def create_table():
+def create_tables():
     #SQL
     query = """CREATE TABLE IF NOT EXISTS Accounts(username TEXT, password TEXT,firstname TEXT,lastname TEXT, email INTEGER, sms INTEGER, ads INTEGER, language TEXT)"""
     c.execute(query)
     conn.commit()
-
+    query = """CREATE TABLE IF NOT EXISTS friends(userName TEXT,friend TEXT)"""
+    c.execute(query)
+    conn.commit()
+    query = """CREATE TABLE IF NOT EXISTS requests(userName TEXT, requestee TEXT)"""
+    c.execute(query)
+    conn.commit()
+    query = """CREATE TABLE IF NOT EXISTS Jobs(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, employer TEXT, location TEXT, salary TEXT, posterfirst TEXT, posterlast TEXT)"""
+    c.execute(query)
+    conn.commit()
+    query = """CREATE TABLE IF NOT EXISTS PersonalProfile(userName TEXT,title TEXT, major TEXT, universityName TEXT, about TEXT)"""
+    c.execute(query)
+    conn.commit()
+    query = """CREATE TABLE IF NOT EXISTS expierience(userName TEXT, jobId INT, title TEXT, employer TEXT, dateStart TEXT, dateEnd TEXT, location TEXT, description TEXT)"""
+    c.execute(query)
+    conn.commit()
+    query = """CREATE TABLE IF NOT EXISTS education(userName TEXT, schoolName TEXT, degree TEXT, yearsAttended INT)"""
+    c.execute(query)
+    conn.commit()
+    query = """CREATE TABLE IF NOT EXISTS SavedJobs(username TEXT, jobID INTEGER, PRIMARY KEY(username,jobID))"""
+    c.execute(query)
+    conn.commit()
+    #c.execute('''CREATE TABLE IF NOT EXISTS app_status(username TEXT, title TEXT, posted TEXT, status TEXT)''')
+    c.execute('''CREATE TABLE  IF NOT EXISTS "app_status" ("username" TEXT, "jobID" INTEGER, "status" TEXT,	PRIMARY KEY("username","jobID"))''')
+    conn.commit()
+    c.execute('''CREATE TABLE IF NOT EXISTS applications(username TEXT, jobID INTEGER, grad_date TEXT, start_date TEXT, story TEXT)''')
+    conn.commit()
 #/////////////////////////////////////////////////////////////////////////     ENTER DATA INTO DB     ////////////////////////////////////////////////////////////////////
 
 #inserts login info from user into table
